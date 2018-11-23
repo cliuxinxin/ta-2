@@ -29,7 +29,7 @@
       <usages-collector id="statistics.file.extensions.open">
         <counts>
           <entry key="md" value="1" />
-          <entry key="py" value="5" />
+          <entry key="py" value="6" />
           <entry key="txt" value="1" />
         </counts>
       </usages-collector>
@@ -37,20 +37,31 @@
         <counts>
           <entry key="Markdown" value="1" />
           <entry key="PLAIN_TEXT" value="1" />
-          <entry key="Python" value="5" />
+          <entry key="Python" value="6" />
         </counts>
       </usages-collector>
     </session>
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/train.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="490">
+            <state relative-caret-position="489">
               <caret line="121" selection-start-line="121" selection-end-line="121" />
               <folding>
                 <element signature="e#0#15#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/save_module.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state>
+              <folding>
+                <element signature="e#0#45#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -137,6 +148,11 @@
             <path>
               <item name="ta-2" type="b2602c69:ProjectViewProjectNode" />
               <item name="ta-2" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="ta-2" type="b2602c69:ProjectViewProjectNode" />
+              <item name="ta-2" type="462c0819:PsiDirectoryNode" />
+              <item name="tacotron" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -259,10 +275,19 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/train.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="490">
+        <state relative-caret-position="489">
           <caret line="121" selection-start-line="121" selection-end-line="121" />
           <folding>
             <element signature="e#0#15#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/save_module.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <folding>
+            <element signature="e#0#45#0" expanded="true" />
           </folding>
         </state>
       </provider>
