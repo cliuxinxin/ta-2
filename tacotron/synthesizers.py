@@ -17,45 +17,35 @@ from tacotron.utils.text import text_to_sequence
 class Synthesizer:
 	def load(self, checkpoint_path, hparams, gta=False, model_name='Tacotron',model_version=1):
 		log('Constructing model: %s' % model_name)
-		#Force the batch size to be known in order to use attention masking in batch synthesis
-		inputs = tf.placeholder(tf.int32, (1, 600), name='inputs')
-		input_lengths = tf.placeholder(tf.int32, (1), name='input_lengths')
-		targets = tf.placeholder(tf.float32, (1, 9999, hparams.num_mels), name='mel_targets')
-		split_infos = tf.placeholder(tf.int32, shape=(hparams.tacotron_num_gpus, None), name='split_infos')
+		inputs = tf.placeholder(tf.int32, [None, 999], 'inputs')
+		input_lengths = tf.placeholder(tf.int32, [None], 'input_lengths')
+		targets = tf.placeholder(tf.float32, [None, None, hparams.num_mels], 'mel_targets')
 		with tf.variable_scope('Tacotron_model') as scope:
 			self.model = create_model(model_name, hparams)
 			if gta:
-				self.model.initialize(inputs, input_lengths, targets, gta=gta, split_infos=split_infos)
+				self.model.initialize(inputs, input_lengths, targets, gta=gta)
 			else:
-				self.model.initialize(inputs, input_lengths, split_infos=split_infos)
-
-			self.mel_outputs = self.model.tower_mel_outputs
-			self.linear_outputs = self.model.tower_linear_outputs if (hparams.predict_linear and not gta) else None
-			self.alignments = self.model.tower_alignments
-			self.stop_token_prediction = self.model.tower_stop_token_prediction
-			self.targets = targets
+				self.model.initialize(inputs, input_lengths)
+			self.mel_outputs = self.model.mel_outputs
+			self.linear_outputs = self.model.linear_outputs if (hparams.predict_linear and not gta) else None
+			self.stop_token_prediction = self.model.stop_token_prediction
+			self.alignments = self.model.alignments
 
 		self.gta = gta
 		self._hparams = hparams
-		#pad input sequences with the <pad_token> 0 ( _ )
+		# pad input sequences with the <pad_token> 0 ( _ )
 		self._pad = 0
-		#explicitely setting the padding to a value that doesn't originally exist in the spectogram
-		#to avoid any possible conflicts, without affecting the output range of the model too much
+		# explicitely setting the padding to a value that doesn't originally exist in the spectogram
+		# to avoid any possible conflicts, without affecting the output range of the model too much
 		if hparams.symmetric_mels:
 			self._target_pad = -hparams.max_abs_value
 		else:
 			self._target_pad = 0.
 
-		self.inputs = inputs
-		self.input_lengths = input_lengths
-		self.targets = targets
-		self.split_infos = split_infos
-
 		log('Loading checkpoint: %s' % checkpoint_path)
-		#Memory allocation on the GPUs as needed
+		# Memory allocation on the GPU as needed
 		config = tf.ConfigProto()
 		config.gpu_options.allow_growth = True
-		config.allow_soft_placement = True
 
 		self.session = tf.Session(config=config)
 		self.session.run(tf.global_variables_initializer())
@@ -78,8 +68,8 @@ class Synthesizer:
 					'input_lengths':tf.saved_model.utils.build_tensor_info(input_lengths)
 				},
 				outputs={
-					'linear_outputs': tf.saved_model.utils.build_tensor_info(tf.convert_to_tensor(self.model.tower_linear_outputs)),
-					'stop_token':tf.saved_model.utils.build_tensor_info(tf.convert_to_tensor(self.model.tower_stop_token_prediction))
+					'linear_outputs': tf.saved_model.utils.build_tensor_info(tf.convert_to_tensor(self.linear_outputs)),
+					'stop_token':tf.saved_model.utils.build_tensor_info(tf.convert_to_tensor(self.stop_token_prediction))
 					},
 				method_name=tf.saved_model.signature_constants.PREDICT_METHOD_NAME))
 
@@ -96,15 +86,15 @@ class Synthesizer:
 		builder.save()
 
 		print("start build converter")
-		converter = tf.contrib.lite.TocoConverter.from_session(
+		converter = tf.contrib.lite.TFLiteConverter.from_session(
 			self.session,
 			input_tensors=[
 				inputs,
 				input_lengths
 			],
 			output_tensors=[
-				tf.convert_to_tensor(self.model.tower_linear_outputs),
-				tf.convert_to_tensor(self.model.tower_stop_token_prediction)
+				tf.convert_to_tensor(self.linear_outputs),
+				tf.convert_to_tensor(self.stop_token_prediction)
 			])
 
 		converter.post_training_quantize = True

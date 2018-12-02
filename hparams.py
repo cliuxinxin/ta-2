@@ -170,8 +170,8 @@ hparams = tf.contrib.training.HParams(
 	tacotron_adam_beta2 = 0.999, #AdamOptimizer beta2 parameter
 	tacotron_adam_epsilon = 1e-6, #AdamOptimizer Epsilon parameter
 
-	tacotron_zoneout_rate = 0.1, #zoneout rate for all LSTM cells in the network
-	tacotron_dropout_rate = 0.5, #dropout rate for all convolutional layers + prenet
+	tacotron_zoneout_rate = 0.2, #zoneout rate for all LSTM cells in the network
+	tacotron_dropout_rate = 0.6, #dropout rate for all convolutional layers + prenet
 
 	tacotron_clip_gradients = True, #whether to clip gradients
 	natural_eval = False, #Whether to use 100% natural eval (to evaluate Curriculum Learning performance) or with same teacher-forcing ratio as in training (just for overfit)
