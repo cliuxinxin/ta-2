@@ -1,4 +1,6 @@
-
+__pycache__/
+wav_out/
+logs-Tacotron/
 logs-Tacotron/.DS_Store
 logs-Tacotron/taco_pretrained/.DS_Store
 logs-Tacotron/taco_pretrained/checkpoint
@@ -26,3 +28,5 @@ tacotron/utils/__pycache__/numbers.cpython-36.pyc
 tacotron/utils/__pycache__/plot.cpython-36.pyc
 tacotron/utils/__pycache__/symbols.cpython-36.pyc
 tacotron/utils/__pycache__/text.cpython-36.pyc
+__pycache__/hparams.cpython-36.pyc
+*.pyc
