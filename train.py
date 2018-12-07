@@ -107,7 +107,7 @@ def main():
 		help='Steps between running summary ops')
 	parser.add_argument('--checkpoint_interval', type=int, default=5000,
 		help='Steps between writing checkpoints')
-	parser.add_argument('--eval_interval', type=int, default=10000,
+	parser.add_argument('--eval_interval', type=int, default=5000,
 		help='Steps between eval on test data')
 	parser.add_argument('--tacotron_train_steps', type=int, default=1000000, help='total number of tacotron training steps')
 	parser.add_argument('--wavenet_train_steps', type=int, default=750000, help='total number of wavenet training steps')
