@@ -219,27 +219,27 @@ def index():
     start = time()
     sentences = request.args.get('sentences')
     record_sentences = sentences
-    # if r.get(record_sentences):
-    #     file_name = r.get(record_sentences)
-    #     wav = np.load(os.path.join('wav_out/{}'.format(file_name)))
-    # else:
-    sentences = pinyin_sentence(sentences)
-    sentences = re.sub(r'[a-z]\d', lambda x: x.group(0)[0] + dic[int(x.group(0)[1])], sentences)
-    sentences = sentences.split("。")
-    while '' in sentences:
-        sentences.remove('')
-    wav = synth.synthesize(sentences)
-        # thread_a = SaveWav(wav,record_sentences)
-        # thread_a.start()
+    if r.get(record_sentences):
+        file_name = r.get(record_sentences)
+        wav = np.load(os.path.join('wav_out/{}'.format(file_name)))
+    else:
+        sentences = pinyin_sentence(sentences)
+        sentences = re.sub(r'[a-z]\d', lambda x: x.group(0)[0] + dic[int(x.group(0)[1])], sentences)
+        sentences = sentences.split("。")
+        while '' in sentences:
+            sentences.remove('')
+        wav= synth.synthesize(sentences, basenames, None)
+        thread_a = SaveWav(wav,record_sentences)
+        thread_a.start()
 
     stop = time()
     dict['wav_file'] = wav
     dict['time'] = stop-start
-    return json.dumps(dict)
+    return json.dumps(dict, cls=NumpyEncoder)
 
 #
 if __name__ == "__main__":
-    server = pywsgi.WSGIServer(('127.0.0.1', 19877), app)
+    server = pywsgi.WSGIServer(('127.0.0.1', 19887), app)
     server.serve_forever()
     # app.run(host='0.0.0.0:19877')
 
