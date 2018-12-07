@@ -51,7 +51,7 @@ hparams = tf.contrib.training.HParams(
 	min_level_db = -100,
 	ref_level_db = 20,
 	fmin = 55, #Set this to 55 if your speaker is male! if female, 95 should help taking off noise. (To test depending on dataset. Pitch info: male~[65, 260], female~[100, 525])
-	fmax = 7600,
+	fmax = 4000,
 
 	#Griffin Lim
 	power = 1.5,
