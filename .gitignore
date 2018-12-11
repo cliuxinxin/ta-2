@@ -30,3 +30,4 @@ tacotron/utils/__pycache__/symbols.cpython-36.pyc
 tacotron/utils/__pycache__/text.cpython-36.pyc
 __pycache__/hparams.cpython-36.pyc
 *.pyc
+gun_basic.conf

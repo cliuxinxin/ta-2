@@ -36,19 +36,19 @@ def synic(sentences,delimiters):
     loop.run_until_complete(main(loop,sentences,files))
     files  = sorted(files.items(),key = lambda item:item[0])
     files = [np.asarray(file[1])  for file in files]
-    nowTime = datetime.now().strftime('%Y%m%d%H%M%S')
-    output_file = 'wav-' + nowTime   + str(random.randint(0, 100))  + '.wav'
+    nowTime = datetime.now()
+    output_file = 'wav-' + nowTime.strftime('%Y%m%d%H%M%S') + str(nowTime.microsecond) + '.wav'
     if len(files) > 1:
         new_files = []
         for file, delimiter in zip(files, delimiters):
-            break_sound = np.zeros(int(16000 * 1 * 0.480))
+            break_sound = np.zeros(int(8000 * 1 * 0.480))
             if delimiter == '，':
-                break_sound = np.zeros(int(16000 * 1 * 0.240))
+                break_sound = np.zeros(int(8000 * 1 * 0.240))
             new_files.append(np.concatenate((file,break_sound)))
         wav = np.concatenate((new_files), axis=0)
     else:
         wav = files[0]
-    audio.save_wav(wav, os.path.join('wav_out/{}'.format(output_file)), sr=16000)
+    audio.save_wav(wav, os.path.join('wav_out/{}'.format(output_file)), sr=8000)
     stop = time()
     print(stop - start)
     return output_file

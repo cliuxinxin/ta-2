@@ -65,93 +65,13 @@ class Synthesizer:
 			self.model.input_lengths: np.asarray(input_lengths, dtype=np.int32),
 		}
 
-		# if self.gta:
-		# 	np_targets = [np.load(mel_filename) for mel_filename in mel_filenames]
-		# 	target_lengths = [len(np_target) for np_target in np_targets]
-		# 	padded_targets = self._prepare_targets(np_targets, self._hparams.outputs_per_step)
-		# 	feed_dict[self.model.mel_targets] = padded_targets.reshape(len(np_targets), -1, 80)
 
-		# if self.gta or not hparams.predict_linear:
-		# 	mels, alignments = self.session.run([self.mel_outputs, self.alignments], feed_dict=feed_dict)
-		# 	if self.gta:
-		# 		mels = [mel[:target_length, :] for mel, target_length in zip(mels, target_lengths)] #Take off the reduction factor padding frames for time consistency with wavenet
-		# 		assert len(mels) == len(np_targets)
-
-
-		# linears, mels = self.session.run([self.linear_outputs, self.mel_outputs], feed_dict=feed_dict)
-		# linears = self.session.run([self.linear_outputs], feed_dict=feed_dict)
 		linears, stop_tokens = self.session.run([self.linear_outputs, self.stop_token_prediction], feed_dict=feed_dict)
 
-		# if basenames is None:
-		# 	#Generate wav and read it
-		# 	# wav = audio.inv_mel_spectrogram(mels.T, hparams)
-		# 	# audio.save_wav(wav, 'temp.wav', sr=hparams.sample_rate) #Find a better way
-		#
-		# 	chunk = 512
-		# 	f = wave.open('temp.wav', 'rb')
-		# 	p = pyaudio.PyAudio()
-		# 	stream = p.open(format=p.get_format_from_width(f.getsampwidth()),
-		# 		channels=f.getnchannels(),
-		# 		rate=f.getframerate(),
-		# 		output=True)
-		# 	data = f.readframes(chunk)
-		# 	while data:
-		# 		stream.write(data)
-		# 		data=f.readframes(chunk)
-		#
-		# 	stream.stop_stream()
-		# 	stream.close()
-		#
-		# 	p.terminate()
-		# 	return
 
+		wav = audio.inv_linear_spectrogram(linears[0].T, hparams)
 
-		# saved_mels_paths = []
-		# speaker_ids = []
-		for i, mel in enumerate(linears):
-			#Get speaker id for global conditioning (only used with GTA generally)
-			# if hparams.gin_channels > 0:
-			# 	raise RuntimeError('Please set the speaker_id rule in line 99 of tacotron/synthesizer.py to allow for global condition usage later.')
-			# 	speaker_id = '<no_g>' #set the rule to determine speaker id. By using the file basename maybe? (basenames are inside "basenames" variable)
-			# 	speaker_ids.append(speaker_id) #finish by appending the speaker id. (allows for different speakers per batch if your model is multispeaker)
-			# else:
-			# 	speaker_id = '<no_g>'
-			# 	speaker_ids.append(speaker_id)
-
-			# Write the spectrogram to disk
-			# Note: outputs mel-spectrogram files and target ones have same names, just different folders
-			# mel_filename = os.path.join(out_dir, 'mel-{}.npy'.format(basenames[i]))
-			# np.save(mel_filename, mel, allow_pickle=False)
-			# saved_mels_paths.append(mel_filename)
-
-			# if log_dir is not None:
-				#save wav (mel -> wav)
-				# wav = audio.inv_mel_spectrogram(mel.T, hparams)
-				# audio.save_wav(wav, os.path.join(log_dir, 'wavs/wav-{}-mel.wav'.format(basenames[i])), sr=hparams.sample_rate)
-
-				#save alignments
-				# plot.plot_alignment(alignments[i], os.path.join(log_dir, 'plots/alignment-{}.png'.format(basenames[i])),
-				# 	info='{}'.format(texts[i]), split_title=True)
-
-				#save mel spectrogram plot
-				# plot.plot_spectrogram(mel, os.path.join(log_dir, 'plots/mel-{}.png'.format(basenames[i])),
-				# 	info='{}'.format(texts[i]), split_title=True)
-
-			if hparams.predict_linear:
-				#save wav (linear -> wav)
-				wav = audio.inv_linear_spectrogram(linears[i].T, hparams)
-				nowTime = datetime.now()
-				output_file = 'wav-' + nowTime.strftime('%Y%m%d%H%M%S') + str(nowTime.microsecond) + '.wav'
-				audio.save_wav(wav, os.path.join('wav_out/{}'.format(output_file)), sr=hparams.sample_rate)
-					# audio.save_wav(wav, os.path.join(log_dir, 'wavs/wav-{}-linear.wav'.format(basenames[i])), sr=hparams.sample_rate)
-
-					#save mel spectrogram plot
-					# plot.plot_spectrogram(linears[i], os.path.join(log_dir, 'plots/linear-{}.png'.format(basenames[i])),
-						# info='{}'.format(texts[i]), split_title=True, auto_aspect=True)
-
-
-
-		return output_file
+		return wav
 
 	def _round_up(self, x, multiple):
 		remainder = x % multiple

@@ -207,8 +207,8 @@ class SaveWav(Thread):
         self.record_sentences = record_sentences
 
     def run(self):
-        nowTime = datetime.now().strftime('%Y%m%d%H%M%S')
-        output_file = 'wav-' + nowTime + str(random.randint(0, 100)) + '.npy'
+        nowTime = datetime.now()
+        output_file = 'wav-' + nowTime.strftime('%Y%m%d%H%M%S') + str(nowTime.microsecond) + '.npy'
         np.save(os.path.join('wav_out/{}'.format(output_file)), self.wav, allow_pickle=False)
         r.set(self.record_sentences, output_file)
 
@@ -228,7 +228,7 @@ def index():
         sentences = sentences.split("。")
         while '' in sentences:
             sentences.remove('')
-        wav= synth.synthesize(sentences, basenames, None)
+        wav= synth.synthesize(sentences)
         thread_a = SaveWav(wav,record_sentences)
         thread_a.start()
 
