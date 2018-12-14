@@ -66,8 +66,9 @@ class Synthesizer:
 		}
 
 
-		linears, stop_tokens = self.session.run([self.linear_outputs, self.stop_token_prediction], feed_dict=feed_dict)
+		# linears, alignments= self.session.run([self.linear_outputs, self.alignments], feed_dict=feed_dict)
 
+		linears, stop_token= self.session.run([self.linear_outputs, self.stop_token_prediction], feed_dict=feed_dict)
 
 		wav = audio.inv_linear_spectrogram(linears[0].T, hparams)
 
