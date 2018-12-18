@@ -198,7 +198,7 @@ checkpoint_path = tf.train.get_checkpoint_state(taco_checkpoint).model_checkpoin
 synth = Synthesizer()
 synth.load(checkpoint_path, hparams)
 basenames='base'
-r = redis.Redis(host='localhost', port=6379, decode_responses=True)
+r = redis.Redis(host='localhost', port=6379, decode_responses=True,db=1)
 
 class SaveWav(Thread):
     def __init__(self, wav,record_sentences):
