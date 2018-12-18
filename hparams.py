@@ -27,7 +27,7 @@ hparams = tf.contrib.training.HParams(
 	n_fft = 512, #Extra window size is filled with 0 paddings to match this parameter
 	hop_size = 100, #For 22050Hz, 275 ~= 12.5 ms
 	win_size = 400, #For 22050Hz, 1100 ~= 50 ms (If None, win_size = n_fft)
-	sample_rate = 1600, #22050 Hz (corresponding to ljspeech dataset)
+	sample_rate = 16000, #22050 Hz (corresponding to ljspeech dataset)
 	frame_shift_ms = None,
 
 	#M-AILABS (and other datasets) trim params
