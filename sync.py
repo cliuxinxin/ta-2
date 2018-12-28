@@ -41,14 +41,14 @@ def synic(sentences,delimiters):
     if len(files) > 1:
         new_files = []
         for file, delimiter in zip(files, delimiters):
-            break_sound = np.zeros(int(8000 * 1 * 0.480))
+            break_sound = np.zeros(int(16000 * 1 * 0.480))
             if delimiter == '，':
-                break_sound = np.zeros(int(8000 * 1 * 0.240))
+                break_sound = np.zeros(int(16000 * 1 * 0.240))
             new_files.append(np.concatenate((file,break_sound)))
         wav = np.concatenate((new_files), axis=0)
     else:
         wav = files[0]
-    audio.save_wav(wav, os.path.join('wav_out/{}'.format(output_file)), sr=8000)
+    audio.save_wav(wav, os.path.join('wav_out/{}'.format(output_file)), sr=16000)
     stop = time()
     print(stop - start)
     return output_file

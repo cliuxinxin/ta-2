@@ -6,9 +6,11 @@ import re
 from time import time
 import json
 import sync
+from flask_cors import CORS
 
 app = Flask(__name__)
-app.debug = True
+app.debug = False 
+CORS(app, supports_credentials=True)
 
 class BadRequest(Exception):
     """将本地错误包装成一个异常实例供抛出"""

@@ -13,8 +13,9 @@ from tacotron.synthesizerp import Synthesizer
 
 
 def pinyin_sentence(sentences):
-    pinyin = lazy_pinyin(sentences,style=pypinyin.TONE3)
+    pinyin = lazy_pinyin(sentences, style=pypinyin.TONE3)
     return " ".join(pinyin)
+
 
 taco_checkpoint = os.path.join('logs-Tacotron', 'taco_pretrained/')
 checkpoint_path = tf.train.get_checkpoint_state(taco_checkpoint).model_checkpoint_path
@@ -26,7 +27,7 @@ generate_time = []
 for i in range(test_times):
     print("{} time test".format(str(i)))
     start = time()
-    sentences = "我叫做刘新新，是深度学习工程师。"
+    sentences = "我叫刘新新"
     sentences = pinyin_sentence(sentences)
     dic = list("①①②③④")
     sentences = re.sub(r'[a-z]\d', lambda x: x.group(0)[0] + dic[int(x.group(0)[1])], sentences)
@@ -36,12 +37,12 @@ for i in range(test_times):
     stop = time()
     one_wav_time = len(wav)/hparams.sample_rate
     one_genrate_time = stop - start
-    print("wav len is {}, generate time is {}".format(str(one_wav_time),str(one_genrate_time)))
+    print("wav len is {}, generate time is {}".format(str(one_wav_time), str(one_genrate_time)))
     wav_time.append(one_wav_time)
     generate_time.append(one_genrate_time)
 
-wav_time_mean  = np.mean(wav_time)
+wav_time_mean = np.mean(wav_time)
 generate_time_mean = np.mean(generate_time)
-print ("It will cosume time about : {}".format(str(generate_time_mean)))
-print ("The wav length is {}".format(str(wav_time_mean)))
-print ("The ratio is {}".format(str(wav_time_mean/generate_time_mean)))
+print("It will cosume time about : {}".format(str(generate_time_mean)))
+print("The wav length is {}".format(str(wav_time_mean)))
+print("The ratio is {}".format(str(wav_time_mean/generate_time_mean)))

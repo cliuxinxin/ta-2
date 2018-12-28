@@ -38,7 +38,7 @@ class Tacotron():
 		if mel_targets is not None and stop_token_targets is None and not gta:
 			raise ValueError('Mel targets are provided without corresponding token_targets')
 		if not gta and self._hparams.predict_linear==True and linear_targets is None and is_training:
-			raise ValueError('Model is set to use post processing to predict linear spectrograms in training but no linear targets given!')
+			raise ValueError('Model is set to  use post processing to  predict linear spectrograms in training but no linear targets given!')
 		if gta and linear_targets is not None:
 			raise ValueError('Linear spectrogram prediction is not supported in GTA mode!')
 		if is_training and self._hparams.mask_decoder and targets_lengths is None:
@@ -53,7 +53,7 @@ class Tacotron():
 			if hp.tacotron_teacher_forcing_mode == 'scheduled' and is_training:
 				assert global_step is not None
 
-			#GTA is only used for predicting mels to train Wavenet vocoder, so we ommit post processing when doing GTA synthesis
+			#GTA is only used for predicting mels to  train Wavenet vocoder, so we ommit post processing when doing GTA synthesis
 			post_condition = hp.predict_linear and not gta
 
 			# Embeddings ==> [batch_size, sequence_length, embedding_dim]
@@ -120,7 +120,7 @@ class Tacotron():
 				swap_memory=hp.tacotron_swap_with_cpu)
 
 
-			# Reshape outputs to be one output per entry
+			# Reshape outputs to  be one output per entry
 			#==> [batch_size, non_reduced_decoder_steps (decoder_steps * r), num_mels]
 			decoder_output = tf.reshape(frames_prediction, [batch_size, -1, hp.num_mels])
 			stop_token_prediction = tf.reshape(stop_token_prediction, [batch_size, -1])
@@ -132,7 +132,7 @@ class Tacotron():
 			#Compute residual using post-net ==> [batch_size, decoder_steps * r, postnet_channels]
 			residual = postnet(decoder_output)
 
-			#Project residual to same dimension as mel spectrogram
+			#Project residual to  same dimension as mel spectrogram
 			#==> [batch_size, decoder_steps * r, num_mels]
 			residual_projection = FrameProjection(hp.num_mels, scope='postnet_projection')
 			projected_residual = residual_projection(residual)
@@ -143,7 +143,7 @@ class Tacotron():
 
 
 			if post_condition:
-				# Add post-processing CBHG. This does a great job at extracting features from mels before projection to Linear specs.
+				# Add post-processing CBHG. This does a great job at extracting features from mels before projection to  Linear specs.
 				post_cbhg = CBHG(hp.cbhg_kernels, hp.cbhg_conv_channels, hp.cbhg_pool_size, [hp.cbhg_projection, hp.num_mels],
 					hp.cbhg_projection_kernel_size, hp.cbhg_highwaynet_layers, 
 					hp.cbhg_highway_units, hp.cbhg_rnn_units, is_training, name='CBHG_postnet')
@@ -151,7 +151,7 @@ class Tacotron():
 				#[batch_size, decoder_steps(mel_frames), cbhg_channels]
 				post_outputs = post_cbhg(mel_outputs, None)
 
-				#Linear projection of extracted features to make linear spectrogram
+				#Linear projection of extracted features to  make linear spectrogram
 				linear_specs_projection = FrameProjection(hp.num_freq, scope='cbhg_linear_specs_projection')
 
 				#[batch_size, decoder_steps(linear_frames), num_freq]
@@ -195,7 +195,7 @@ class Tacotron():
 
 
 	def add_loss(self):
-		'''Adds loss to the model. Sets "loss" field. initialize must have been called.'''
+		'''Adds loss to  the model. Sets "loss" field. initialize must have been called.'''
 		with tf.variable_scope('loss') as scope:
 			hp = self._hparams
 
@@ -211,7 +211,7 @@ class Tacotron():
 					self.stop_token_prediction, self.targets_lengths, hparams=self._hparams)
 				#Compute masked linear loss
 				if hp.predict_linear:
-					#Compute Linear L1 mask loss (priority to low frequencies)
+					#Compute Linear L1 mask loss (priority to  low frequencies)
 					linear_loss = MaskedLinearLoss(self.linear_targets, self.linear_outputs,
 						self.targets_lengths, hparams=self._hparams)
 				else:
