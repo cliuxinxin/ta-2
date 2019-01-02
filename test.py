@@ -19,15 +19,17 @@ def pinyin_sentence(sentences):
 
 taco_checkpoint = os.path.join('logs-Tacotron', 'taco_pretrained/')
 checkpoint_path = tf.train.get_checkpoint_state(taco_checkpoint).model_checkpoint_path
+# logs-Tacotron/taco_pretrained/tacotron_model.ckpt-65000
 synth = Synthesizer()
 synth.load(checkpoint_path, hparams)
 
-test_times = 2
+test_times =1
 wav_time = []
 generate_time = []
 
 sentences = [
-    '你好','我叫刘新新',
+    '你好',
+    '我叫刘新新',
     '这是一条测试数据',
     '中华人民共和国成立了',
     '您的流量还有四十五兆',
