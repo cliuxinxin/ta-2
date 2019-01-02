@@ -23,7 +23,7 @@ checkpoint_path = tf.train.get_checkpoint_state(taco_checkpoint).model_checkpoin
 synth = Synthesizer()
 synth.load(checkpoint_path, hparams)
 
-test_times =1
+test_times = 2
 wav_time = []
 generate_time = []
 
@@ -36,7 +36,8 @@ sentences = [
     '德国人是很守时的，英国人却不是',
     '昨天我吃了汉堡，今天不想吃了，想吃面',
     '你说的都是真的吗，还是他们说的都是真的。',
-    '真是一个奇怪的社会，他们都非常有钱，我却没那么多钱。'
+    '真是一个奇怪的社会，他们都非常有钱，我却没那么多钱。',
+    '您好，您本月已使用了五百二十兆流量，还剩余一百三十兆'
 ]
 
 dic = list("①①②③④")
@@ -51,15 +52,18 @@ for i in range(test_times):
         output_file = "test-{}.wav".format(str(i))
         audio.save_wav(wav, os.path.join('wav_out/{}'.format(output_file)), sr=hparams.sample_rate)
         stop_time = time()
-        one_wav_time = len(wav)/hparams.sample_rate
-        one_genrate_time = stop_time - start_time
-        print("wav len is {}, generate time is {}".format(str(one_wav_time), str(one_genrate_time)))
-        wav_time.append(one_wav_time)
-        generate_time.append(one_genrate_time)
+        if i == 0:
+            pass
+        else:
+            one_wav_time = len(wav)/hparams.sample_rate
+            one_genrate_time = stop_time - start_time
+            print("the {} wav len is {}, generate time is {}".format(str(i),str(one_wav_time), str(one_genrate_time)))
+            wav_time.append(one_wav_time)
+            generate_time.append(one_genrate_time)
 
 wav_time_mean = np.mean(wav_time)
 generate_time_mean = np.mean(generate_time)
 
-print("It will comsume time about : {}".format(str(generate_time_mean)))
-print("The wav length is {}".format(str(wav_time_mean)))
+print("It will comsume average time about : {}".format(str(generate_time_mean)))
+print("The wav average length is {}".format(str(wav_time_mean)))
 print("The ratio is {}".format(str(wav_time_mean/generate_time_mean)))
