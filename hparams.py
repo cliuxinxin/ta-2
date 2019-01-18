@@ -59,7 +59,7 @@ hparams = tf.contrib.training.HParams(
 	###########################################################################################################################################
 
 	#Tacotron
-	outputs_per_step = 3, #number of frames to generate at each decoding step (speeds up computation and allows for higher batch size)
+	outputs_per_step = 5, #number of frames to generate at each decoding step (speeds up computation and allows for higher batch size)
 	stop_at_any = True, #Determines whether the decoder should stop when predicting <stop> to any frame or to all of them
 
 	embedding_dim = 512, #dimension of embedding space
@@ -94,10 +94,10 @@ hparams = tf.contrib.training.HParams(
 	cbhg_highway_units = 128, #Number of units used in HighwayNet fully connected layers
 	cbhg_rnn_units = 128, #Number of GRU units used in bidirectional RNN of CBHG block. CBHG output is 2x rnn_units in shape
 
-	mask_encoder = False, #whether to mask encoder padding while computing attention
-	mask_decoder = False, #Whether to use loss mask for padded sequences (if False, <stop_token> loss function will not be weighted, else recommended pos_weight = 20)
+	mask_encoder = True, #whether to mask encoder padding while computing attention
+	mask_decoder = True, #Whether to use loss mask for padded sequences (if False, <stop_token> loss function will not be weighted, else recommended pos_weight = 20)
 
-	cross_entropy_pos_weight = 1, #Use class weights to reduce the stop token classes imbalance (by adding more penalty on False Negatives (FN)) (1 = disabled)
+	cross_entropy_pos_weight = 20, #Use class weights to reduce the stop token classes imbalance (by adding more penalty on False Negatives (FN)) (1 = disabled)
 	predict_linear = True, #Whether to add a post-processing network to the Tacotron to predict linear spectrograms (True mode Not tested!!)
 	###########################################################################################################################################
 
