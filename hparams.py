@@ -55,7 +55,7 @@ hparams = tf.contrib.training.HParams(
 
 	#Griffin Lim
 	power = 1.5,
-	griffin_lim_iters = 10,
+	griffin_lim_iters = 20,
 	###########################################################################################################################################
 
 	#Tacotron
