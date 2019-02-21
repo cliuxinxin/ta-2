@@ -55,11 +55,11 @@ hparams = tf.contrib.training.HParams(
 
 	#Griffin Lim
 	power = 1.5,
-	griffin_lim_iters = 20,
+	griffin_lim_iters = 60,
 	###########################################################################################################################################
 
 	#Tacotron
-	outputs_per_step = 15, #number of frames to generate at each decoding step (speeds up computation and allows for higher batch size)
+	outputs_per_step = 7, #number of frames to generate at each decoding step (speeds up computation and allows for higher batch size)
 	stop_at_any = True, #Determines whether the decoder should stop when predicting <stop> to any frame or to all of them
 
 	embedding_dim = 512, #dimension of embedding space
